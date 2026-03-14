@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Un pequeño misterio...</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#0d0221,#240046,#ff8fab);
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.card{
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  max-width:520px;
+  box-shadow:0 10px 35px rgba(0,0,0,0.4);
+  animation:fade 1s ease;
+  position:relative;
+  z-index:2;
+}
+
+button{
+  margin-top:15px;
+  padding:12px 22px;
+  border:none;
+  border-radius:12px;
+  background:#ff4fa0;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+input{
+  margin-top:12px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+
+.big{
+  font-size:32px;
+  color:#ff2c8b;
+}
+
+/* estrellas */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation:twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+  from{opacity:0.2}
+  to{opacity:1}
+}
+
+/* luna */
+.moon{
+  position:absolute;
+  width:120px;
+  height:120px;
+  background:#fff;
+  border-radius:50%;
+  top:60px;
+  right:80px;
+  box-shadow:0 0 40px rgba(255,255,255,0.6);
+}
+
+/* corazones */
+.heart{
+  position:absolute;
+  color:#ff4fa0;
+  font-size:20px;
+  animation:float 6s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(100vh); opacity:1}
+  to{transform:translateY(-10vh); opacity:0}
+}
+
+</style>
+</head>
+<body>
+
+<div class="moon"></div>
+
+<!-- Música: Beso - Jósean Log (YouTube embed oculto) -->
+<iframe
+  id="music"
+  width="0"
+  height="0"
+  src="https://www.youtube.com/embed/ntdwWKaGaPQ?enablejsapi=1"
+  title="Beso - Josean Log"
+  frameborder="0"
+  allow="autoplay">
+</iframe>
+
+<div class="card" id="game">
+<h2>Tengo un pequeño juego para ti 🌙</h2>
+<p>Si resuelves los misterios descubrirás algo importante.</p>
+<button onclick="startGame()">Empezar</button>
+</div>
+
+<script>
+
+// NOTA IMPORTANTE:
+// Un iframe de YouTube no tiene método .play().
+// Para iniciar la música debemos cambiar el src agregando autoplay.
+
+function startGame(){
+ const iframe = document.getElementById("music");
+ iframe.src = "https://www.youtube.com/embed/ntdwWKaGaPQ?autoplay=1&loop=1&playlist=ntdwWKaGaPQ";
+ puzzle1();
+}
+
+function puzzle1(){
+ document.getElementById("game").innerHTML=`
+ <h2>Acertijo 1 🧩</h2>
+ <p>¿Qué cosa aparece cuando alguien te manda un mensaje bonito y te hace sonreír?</p>
+ <input id="r1" placeholder="Tu respuesta">
+ <br>
+ <button onclick="check1()">Responder</button>
+ `;
+}
+
+function check1(){
+ let r=document.getElementById("r1").value.toLowerCase();
+ if(r.includes("sonr")){
+ puzzle2();
+ }else{
+ alert("Pista: pasa en tu cara cuando estás feliz 😊");
+ }
+}
+
+function puzzle2(){
+ document.getElementById("game").innerHTML=`
+ <h2>Acertijo 2 ✨</h2>
+ <p>Hay alguien que me parece muy linda.</p>
+ <p>Hablamos por internet...</p>
+ <p>¿Quién crees que es?</p>
+ <input id="r2" placeholder="Escribe un nombre">
+ <br>
+ <button onclick="final()">Revelar</button>
+ `;
+}
+
+function final(){
+ document.getElementById("game").innerHTML=`
+ <h2>Bueno... tengo que confesarte algo 💌</h2>
+ <p class="big" id="type"></p>
+ <p>Quería encontrar una forma especial de decírtelo.</p>
+ <div>
+ <p>¿Te gustaría seguir conociéndonos?</p>
+ <button onclick="yes()">Sí 💖</button>
+ <button onclick="no()">No 🙈</button>
+ </div>
+ `;
+ typeText("Me gustas mucho.");
+}
+
+function typeText(text){
+ let i=0;
+ let speed=80;
+ function typing(){
+ if(i<text.length){
+ document.getElementById("type").innerHTML+=text.charAt(i);
+ i++;
+ setTimeout(typing,speed);
+ }
+ }
+ typing();
+}
+
+function yes(){
+ document.getElementById("game").innerHTML=`
+ <h2>Me haces muy feliz 🥹</h2>
+ <p>Prometo seguir haciéndote sonreír.</p>
+ `;
+}
+
+function no(){
+ document.getElementById("game").innerHTML=`
+ <h2>Gracias por ser sincera 💫</h2>
+ <p>Igual me alegra haberte conocido.</p>
+ `;
+}
+
+// corazones flotando
+setInterval(()=>{
+ const heart=document.createElement("div");
+ heart.className="heart";
+ heart.innerHTML="❤";
+ heart.style.left=Math.random()*100+"vw";
+ heart.style.fontSize=(Math.random()*20+10)+"px";
+ document.body.appendChild(heart);
+ setTimeout(()=>heart.remove(),6000);
+},300);
+
+// estrellas
+for(let i=0;i<140;i++){
+ const star=document.createElement("div");
+ star.className="star";
+ star.style.left=Math.random()*100+"vw";
+ star.style.top=Math.random()*100+"vh";
+ star.style.animationDuration=(Math.random()*2+1)+"s";
+ document.body.appendChild(star);
+}
+
+</script>
+
+</body>
+</html>
